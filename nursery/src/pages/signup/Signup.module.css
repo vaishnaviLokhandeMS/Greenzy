@@ -1,0 +1,123 @@
+.background {
+    height: 100vh;
+    width: 100%;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.signupBox {
+    width: 600px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: slideUp 0.8s ease-in-out;
+    color: #ffffff;
+}
+
+.heading {
+    font-size: 26px;
+    margin-bottom: 25px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Rows with 2 inputs per row */
+.row {
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+.row input {
+    flex: 1;
+}
+
+/* Last single row for password */
+.singleRow {
+    display: flex;
+    justify-content: center;
+}
+
+.singleRow input {
+    width: 100%;
+}
+
+.input {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    outline: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #fff;
+    width: 100%;
+}
+
+.input::placeholder {
+    color: #cccccc;
+}
+
+.button {
+    background: #ff9800;
+    border: none;
+    padding: 12px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    width: 100%;
+}
+
+.button:hover {
+    background: #e68900;
+}
+
+.switch {
+    margin-top: 20px;
+    color: #cccccc;
+    font-size: 14px;
+    text-align: center;
+}
+
+.link {
+    color: #00e676;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: color 0.3s ease;
+}
+
+.link:hover {
+    color: #00c853;
+}
+
+.message {
+    color: #4caf50;
+    margin-bottom: 15px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}

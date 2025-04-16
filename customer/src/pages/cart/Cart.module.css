@@ -1,0 +1,337 @@
+/* Cart Page Styles */
+.cartContainer {
+  margin-top: 80px;
+  padding: 40px;
+  text-align: center;
+  animation: fadeIn 0.6s ease-in-out; /* Adding fadeIn animation */
+}
+
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #58a6ff; /* Enhance title color */
+}
+
+.content {
+  display: flex;
+  gap: 40px;
+  justify-content: flex-start;
+  animation: slideIn 0.6s ease-in-out; /* Slide-in animation */
+}
+
+/* Left - Cart Items */
+.left {
+  flex: 0.7; /* 70% width for the cart items */
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-top: 30px;
+  overflow-y: auto; /* Make cart items scrollable */
+}
+
+.item {
+  display: flex;
+  background-color: #1c2128;
+  padding: 20px;
+  border-radius: 12px;
+  gap: 25px;
+  align-items: center;
+  box-shadow: 0 0 15px rgba(88, 166, 255, 0.1);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.item:hover {
+  box-shadow: 0 0 25px rgba(88, 166, 255, 0.3);
+  transform: translateY(-5px); /* Hover animation */
+}
+
+.productImage {
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #333;
+  transition: transform 0.3s ease;
+}
+
+.productImage:hover {
+  transform: scale(1.05); /* Hover effect on image */
+}
+
+.details {
+  text-align: left;
+  flex: 1;
+}
+
+.details h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #58a6ff;
+}
+
+.details p {
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.controls button {
+  background-color: #58a6ff;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 16px;
+}
+
+.controls button:hover {
+  background-color: #88c8ff;
+}
+
+.controls span {
+  font-size: 16px;
+}
+
+.trash {
+  background-color: red;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.trash:hover {
+  background-color: #ff5757;
+}
+
+/* Buy Now Button */
+.buyNow {
+  background-color: #58a6ff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background-color 0.3s;
+}
+
+.buyNow:hover {
+  background-color: #88c8ff;
+}
+
+/* Right - Cart Summary */
+.summary {
+  flex: 0.3; /* 30% width for cart summary */
+  background-color: #161b22;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(88, 166, 255, 0.1);
+  position: sticky;
+  top: 80px; /* Stick the cart summary to the top of the viewport */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  /* Center vertically */
+  align-items: center; /* Center horizontally */
+}
+
+
+.summary h3 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.summary p {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.checkout {
+  background-color: #58a6ff;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+.checkout:hover {
+  background-color: #88c8ff;
+}
+
+.emptyCart {
+  font-size: 18px;
+  color: #58a6ff;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.header {
+  background-color: #161b22;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  animation: slideInHeader 0.6s ease-in-out; /* Slide-in animation for header */
+}
+
+.leftSection {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #58a6ff;
+}
+
+.centerSection {
+  display: flex;
+  align-items: center;
+  flex-grow: 1; /* Center the "My Cart" in the available space */
+  justify-content: center;
+}
+
+.cartTitle {
+  font-size: 20px;
+  color: #fff;
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 30px;
+  padding: 6px 12px;
+  height: 38px;
+  width: 280px;
+  border: 1px solid #ccc;
+}
+
+.searchBar input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  color: #333;
+  background: transparent;
+}
+
+.searchIcon {
+  color: #333;
+  font-size: 16px;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.cartIcon {
+  position: relative;
+}
+
+.cartBadge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background-color: greenyellow;
+  color: #000;
+  font-size: 12px;
+  padding: 2px 5px;
+  border-radius: 50%;
+}
+
+/* Footer Styles */
+.footer {
+  background-color: #161b22;
+  text-align: center;
+  padding: 15px;
+  border-top: 2px solid #58a6ff;
+  margin-top: auto;
+  animation: slideInFooter 0.6s ease-in-out; /* Slide-in footer animation */
+}
+
+.socialIcons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.socialIcons a {
+  color: #58a6ff;
+  font-size: 22px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.socialIcons a:hover {
+  transform: scale(1.2);
+  color: #88c8ff;
+}
+
+/* Animation Effects */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInHeader {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFooter {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

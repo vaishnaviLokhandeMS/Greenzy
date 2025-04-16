@@ -1,0 +1,220 @@
+/* pages/buynow/buyNow.module.css */
+
+/* Container for the entire page */
+.container {
+  background-color: #121212;
+  color: #e0e0e0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header {
+  background-color: #161b22;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.leftSection,
+.centerSection,
+.rightSection {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #58a6ff;
+  margin-right: 20px;
+}
+
+.pageTitle {
+  font-size: 20px;
+  color: #fff;
+  margin-left: 15px;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 30px;
+  padding: 6px 12px;
+  height: 38px;
+  width: 280px;
+  border: 1px solid #ccc;
+  margin-right: 15px;
+}
+
+.searchBar input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  color: #333;
+  background: transparent;
+}
+
+.searchIcon {
+  color: #333;
+  font-size: 16px;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.icon {
+  font-size: 24px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.cartIcon {
+  position: relative;
+}
+
+.cartBadge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background-color: greenyellow;
+  color: #000;
+  font-size: 12px;
+  padding: 2px 5px;
+  border-radius: 50%;
+}
+
+/* 2-Column Layout for Checkout */
+.checkoutContainer {
+  display: flex;
+  flex-grow: 1;
+  gap: 30px;
+  padding: 20px 40px;
+}
+
+/* Left Column: Form */
+.formSection {
+  flex: 0.7; /* 70% width */
+  background-color: #1c2128;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.formSection h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  color: #58a6ff;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup label {
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.formGroup input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background-color: #161b22;
+  color: #fff;
+}
+
+.formGroup input::placeholder {
+  color: #888;
+}
+
+/* Right Column: Order Summary */
+.summarySection {
+  flex: 0.3; /* 30% width */
+  background-color: #1c2128;
+  padding: 20px;
+  border-radius: 12px;
+  height: fit-content;
+}
+
+.summarySection h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  color: #58a6ff;
+}
+
+.itemSummary {
+  background-color: #161b22;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.cartItem {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 10px;
+}
+
+.divider {
+  margin: 10px 0;
+  border: none;
+  border-bottom: 1px solid #333;
+}
+
+.paymentSection {
+  margin-bottom: 20px;
+}
+
+.paymentSection h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.placeOrderButton {
+  width: 100%;
+  padding: 12px 20px;
+  background-color: #58a6ff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.placeOrderButton:hover {
+  background-color: #88c8ff;
+}
+
+/* Footer */
+.footer {
+  background-color: #161b22;
+  text-align: center;
+  padding: 15px;
+  border-top: 2px solid #58a6ff;
+}
+
+.socialIcons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.socialIcons a {
+  color: #58a6ff;
+  font-size: 22px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.socialIcons a:hover {
+  transform: scale(1.2);
+}

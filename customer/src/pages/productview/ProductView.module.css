@@ -1,0 +1,176 @@
+.container {
+    background-color: #0d1117;
+    color: white;
+    min-height: 100vh;
+    font-family: "Poppins", sans-serif;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header {
+    background-color: #161b22;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #58a6ff;
+  }
+  
+  .rightSection {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .searchBar {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 30px;
+    padding: 6px 12px;
+    height: 38px;
+    width: 280px;
+    border: 1px solid #ccc;
+  }
+  
+  .searchBar input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 14px;
+    color: #333;
+    background: transparent;
+  }
+  
+  .searchIcon {
+    color: #333;
+    font-size: 16px;
+    margin-left: 8px;
+    cursor: pointer;
+  }
+  
+  .icon {
+    font-size: 22px;
+    color: #58a6ff;
+    cursor: pointer;
+  }
+  
+  .cartIcon {
+    position: relative;
+  }
+  
+  .cartBadge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background-color: greenyellow;
+    color: #000;
+    font-size: 12px;
+    padding: 2px 5px;
+    border-radius: 50%;
+  }
+  
+  .titleArea {
+    text-align: center;
+    margin: 30px auto 10px;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Exactly 4 columns */
+    gap: 20px; /* Reduced gap between cards */
+    padding: 30px 60px 30px 60px; /* Equal padding */
+    justify-content: start; /* Important: makes grid start from left */
+  }
+  
+  .card {
+    background-color: #1c2128;
+    border-radius: 12px;
+    width: 100%; /* Let the card use full width of the grid column */
+    max-width: none; /* Remove max width restriction */
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.05);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  
+  
+  .card:hover {
+    transform: scale(1.03);
+  }
+  
+  .productImage {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .productName {
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: 500;
+    color: white;
+  }
+  
+  .price {
+    color: #58a6ff;
+    font-size: 18px;
+    margin: 10px 0;
+  }
+  
+  .viewButton {
+    background-color: #58a6ff;
+    border: none;
+    padding: 10px 20px;
+    color: black;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .viewButton:hover {
+    background-color: #88c8ff;
+  }
+  
+  /* Footer */
+  .footer {
+    background-color: #161b22;
+    text-align: center;
+    padding: 15px;
+    border-top: 2px solid #58a6ff;
+    margin-top: auto;
+  }
+  
+  .footer p {
+    margin: 5px 0;
+  }
+  
+  .socialIcons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+  }
+  
+  .socialIcons a {
+    color: #58a6ff;
+    font-size: 22px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .socialIcons a:hover {
+    transform: scale(1.2);
+    color: #88c8ff;
+  }
+  

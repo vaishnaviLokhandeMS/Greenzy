@@ -1,0 +1,150 @@
+.page {
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  /* Header */
+  .header {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+  
+  .logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+  
+  .nav a {
+    margin: 0 1rem;
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .nav a:hover {
+    color: #ff9800;
+  }
+  
+  .profileIcon {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #ff9800;
+    color: white;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .profileIcon:hover {
+    background-color: #e68900;
+  }
+  
+  /* Main */
+  .main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    animation: fadeIn 0.6s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .title {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Form */
+  .form {
+    width: 100%;
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+  }
+  
+  .input,
+  .selectField {
+    flex: 1 1 48%;
+    padding: 0.9rem;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    transition: background 0.3s;
+  }
+  
+  .input:focus,
+  .selectField:focus {
+    background: rgba(255,255,255,0.25);
+    outline: none;
+  }
+  
+  /* Scoped dropdown fix */
+  .selectField option {
+    background-color: #2c5364;
+    color: white;
+  }
+  
+  .fileInput {
+    flex: 1 1 100%;
+    margin-top: 1rem;
+    background: transparent;
+    color: white;
+  }
+  
+  .button {
+    flex: 1 1 100%;
+    padding: 1rem;
+    background: #ff9800;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .button:hover {
+    background: #e68900;
+  }
+  
+  .message {
+    margin-bottom: 1rem;
+    color: #4caf50;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1rem;
+    font-size: 0.9rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  
