@@ -27,7 +27,7 @@ const Home = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get('http://localhost:8000/api/categories');
+        const res = await axios.get('http://backendnursury.leafylegacy.in/api/categories');
         setCategories(res.data);
       } catch (err) {
         console.error('Error fetching categories:', err);
@@ -63,7 +63,7 @@ const Home = () => {
     }
 
     try {
-      const res = await axios.post('http://localhost:5000/api/products/add', data, {
+      const res = await axios.post('http://backend.leafylegacy.in/api/products/add', data, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setMessage(res.data.message || 'Product added successfully!');

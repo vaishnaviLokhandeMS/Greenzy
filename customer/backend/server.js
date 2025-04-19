@@ -9,6 +9,10 @@ const userRoutes = require("./routes/userRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
+const pincodeRoutes = require("./routes/pincodeRoutes");
+const feeRoutes = require("./routes/feeRoutes");
+const shiprocketRoutes = require("./routes/shiprocketRoutes");
+const orderRoutes = require('./routes/orderRoutes');
 
 
 dotenv.config();
@@ -30,6 +34,10 @@ app.use("/api/users", userRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/pincode", pincodeRoutes);
+app.use("/api/fees", feeRoutes);
+app.use("/api/shiprocket", shiprocketRoutes);
+app.use("/api/orders", orderRoutes);
 
 
 // Test route

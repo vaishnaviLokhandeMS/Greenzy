@@ -15,7 +15,7 @@ export default function ProductView() {
 
   useEffect(() => {
     if (category && subcategory) {
-        fetch(`http://localhost:5000/api/products/by-category?category=${category}&subcategory=${subcategory}`)
+        fetch(`https://backend.leafylegacy.in/api/products/by-category?category=${category}&subcategory=${subcategory}`)
         .then((res) => res.json())
         .then((data) => {
           setProducts(data);
@@ -49,7 +49,7 @@ export default function ProductView() {
             <div key={index} className={styles.card}>
               {product.filenames?.length > 0 && (
                 <img
-                  src={`http://localhost:5000/uploads/${product.filenames[0]}`}
+                  src={`https://backend.leafylegacy.in/uploads/${product.filenames[0]}`}
                   alt={product.productname}
                   className={styles.productImage}
                 />

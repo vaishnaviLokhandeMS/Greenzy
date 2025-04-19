@@ -1,14 +1,11 @@
-// pages/buynow/index.js
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import {
   FaSearch,
   FaUser,
   FaShoppingCart,
-  FaFacebook,
-  FaInstagram,
-  FaTwitter,
+  FaCheckCircle,
+  FaTimesCircle,
 } from "react-icons/fa";
 import styles from "./BuyNow.module.css";
 
@@ -18,392 +15,296 @@ export default function BuyNowPage() {
   const [singleItem, setSingleItem] = useState(null);
   const [total, setTotal] = useState(0);
   const [totalWithDiscount, setTotalWithDiscount] = useState(0);
+  const [deliveryCharge, setDeliveryCharge] = useState(0);
+  const [gstFee, setGstFee] = useState({ gstPercentage: 0, platformFee: 0 });
+  const [message, setMessage] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
+  const audioRef = useRef();
 
-  // We'll store the shipping/billing data in a single state
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    companyName: "",
     street: "",
     apartment: "",
     city: "",
     state: "",
-    country: "",
     pincode: "",
     phone: "",
     email: "",
   });
 
-  // Retrieve details from localStorage if available
-  const userContact =
-    typeof window !== "undefined" ? localStorage.getItem("contactnumber") : null;
-  const userId =
-    typeof window !== "undefined" ? localStorage.getItem("userid") : null;
-  const userEmail =
-    typeof window !== "undefined" ? localStorage.getItem("useremail") : null;
-
-  // Extract query parameters: productId, quantity, checkout
+  const userContact = typeof window !== "undefined" ? localStorage.getItem("contactnumber") : null;
+  const userId = typeof window !== "undefined" ? localStorage.getItem("userid") : null;
+  const userEmail = typeof window !== "undefined" ? localStorage.getItem("useremail") : null;
   const { productId, quantity, checkout } = router.query;
+
+  const fetchGstFee = async () => {
+    const res = await fetch("https://backend.leafylegacy.in/api/fees");
+    const data = await res.json();
+    setGstFee(data);
+  };
+
+  const fetchDeliveryCharge = async (pickup, delivery, weight = 0.5, price = 300) => {
+    try {
+      const res = await fetch(
+        `https://backend.leafylegacy.in/api/shiprocket/rate?pickup=${pickup}&delivery=${delivery}&weight=${weight}&price=${price}`
+      );
+      const data = await res.json();
+      if (data.deliveryCharge) setDeliveryCharge(data.deliveryCharge);
+    } catch (err) {
+      console.error("Delivery charge error:", err);
+    }
+  };
 
   useEffect(() => {
     if (!userContact) return;
+    fetchGstFee();
 
     if (checkout === "true") {
-      // Load all cart items if user wants to buy entire cart
-      fetch(`http://localhost:5000/api/cart/view/${userContact}`)
+      fetch(`https://backend.leafylegacy.in/api/cart/view/${userContact}`)
         .then((res) => res.json())
         .then((data) => {
-          setCartItems(data.cart);
-          setTotal(data.total);
-          setTotalWithDiscount(data.totalWithDiscount);
-        })
-        .catch((err) => console.error("Error fetching cart:", err));
+          const filtered = data.cart.filter((item) => item.quantity > 0);
+          setCartItems(filtered);
+
+          let total = 0;
+          let discounted = 0;
+          filtered.forEach((item) => {
+            const price = item.productid.sellers?.[0]?.price || 0;
+            const discount = item.productid.discount || 0;
+            const discountedPrice = price - (price * discount) / 100;
+            total += price * item.quantity;
+            discounted += discountedPrice * item.quantity;
+          });
+          setTotal(total);
+          setTotalWithDiscount(discounted);
+        });
     } else if (productId && quantity) {
-      // For a single item Buy Now
-      fetch(`http://localhost:5000/api/cart/view/${userContact}`)
+      fetch(`https://backend.leafylegacy.in/api/cart/view/${userContact}`)
         .then((res) => res.json())
         .then((data) => {
           const item = data.cart.find((cartItem) => cartItem._id === productId);
           if (item) {
-            setSingleItem({
-              ...item,
-              quantity: Number(quantity),
-            });
+            setSingleItem({ ...item, quantity: Number(quantity) });
             const price = item.productid.sellers[0].price;
             const discount = item.productid.discount || 0;
             const discountedPrice = price - (price * discount) / 100;
-            setTotal(price * Number(quantity));
-            setTotalWithDiscount(discountedPrice * Number(quantity));
+            setTotal(price * quantity);
+            setTotalWithDiscount(discountedPrice * quantity);
           }
-        })
-        .catch((err) => console.error("Error fetching single item:", err));
+        });
     }
   }, [userContact, productId, quantity, checkout]);
 
-  // Helper function to update form data
-  const handleInputChange = (e) => {
+  const handleInputChange = async (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "pincode" && /^\d{6}$/.test(value)) {
+      try {
+        const res = await fetch(`https://backend.leafylegacy.in/api/pincode/details/${value}`);
+        const data = await res.json();
+        setFormData((prev) => ({
+          ...prev,
+          city: data.area,
+          state: data.state,
+        }));
+
+        const price = singleItem
+          ? singleItem.productid.sellers[0].price
+          : cartItems[0]?.productid?.sellers?.[0]?.price || 300;
+
+        fetchDeliveryCharge("414607", value, 0.5, price);
+      } catch (err) {
+        console.error("Pincode autofill error:", err);
+      }
+    }
   };
 
-  // Function to place the order
+  const validateForm = () => {
+    const errors = {};
+    if (formData.phone.length !== 10 || !/^\d{10}$/.test(formData.phone)) {
+      errors.phone = "Phone number must be 10 digits";
+    }
+    if (!formData.email.includes("@")) {
+      errors.email = "Email must include '@'";
+    }
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const confirmAndPlaceOrder = () => {
+    if (!validateForm()) return;
+    setShowConfirmation(true);
+  };
+
   const placeOrder = async () => {
-    try {
-      // Build the list of items to order
-      let itemsToOrder = [];
-      let finalAmount = 0;
-      let finalAmountDiscounted = 0;
+    let itemsToOrder = [];
+    let finalAmount = 0;
+    let finalAmountDiscounted = 0;
 
-      if (singleItem) {
-        const price = singleItem.productid.sellers[0].price;
-        const discount = singleItem.productid.discount || 0;
-        const discountedPrice = price - (price * discount) / 100;
+    const items = singleItem ? [singleItem] : cartItems;
 
-        itemsToOrder.push({
-          productid: singleItem.productid._id,
-          productnumber: singleItem.productid.productnumber || "N/A",
-          productname: singleItem.productid.productname || "N/A",
-          categoryid: singleItem.productid.categoryid || null,
-          subcategoryid: singleItem.productid.subcategoryid || null,
-          quantity: singleItem.quantity,
-          price: price,
-          discount: discount,
-          finalprice: discountedPrice,
-          sellerid: singleItem.productid.sellers[0]._id,
-          isAvailable: true,
-        });
+    items.forEach((item) => {
+      const price = item.productid.sellers[0].price;
+      const discount = item.productid.discount || 0;
+      const discountedPrice = price - (price * discount) / 100;
 
-        finalAmount = price * singleItem.quantity;
-        finalAmountDiscounted = discountedPrice * singleItem.quantity;
-      } else {
-        cartItems.forEach((item) => {
-          const price = item.productid.sellers[0].price;
-          const discount = item.productid.discount || 0;
-          const discountedPrice = price - (price * discount) / 100;
-
-          itemsToOrder.push({
-            productid: item.productid._id,
-            productnumber: item.productid.productnumber || "N/A",
-            productname: item.productid.productname || "N/A",
-            categoryid: item.productid.categoryid || null,
-            subcategoryid: item.productid.subcategoryid || null,
-            quantity: item.quantity,
-            price: price,
-            discount: discount,
-            finalprice: discountedPrice,
-            sellerid: item.productid.sellers[0]._id,
-            isAvailable: true,
-          });
-
-          finalAmount += price * item.quantity;
-          finalAmountDiscounted += discountedPrice * item.quantity;
-        });
-      }
-
-      // Example shipping cost
-      const shippingCost = 50;
-
-      // Create order data
-      const orderData = {
-        userid: userId,
-        items: itemsToOrder,
-        totalamount: finalAmount,
-        shippingamount: shippingCost,
-        totalpayable: finalAmountDiscounted + shippingCost,
-        paymentmethod: "UPI", // or 'Card', 'Wallet', etc.
-        paymentstatus: "pending",
-        orderstatus: "pending",
-        shippingaddress: {
-          street: formData.street,
-          city: formData.city,
-          state: formData.state,
-          pincode: formData.pincode,
-        },
-        userContact: userContact,
-        userEmail: formData.email || userEmail,
-      };
-
-      const response = await fetch("http://localhost:5000/api/orders/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderData),
+      itemsToOrder.push({
+        productid: item.productid._id,
+        productnumber: item.productid.productnumber || "N/A",
+        productname: item.productid.productname || "N/A",
+        categoryid: item.productid.categoryid || null,
+        subcategoryid: item.productid.subcategoryid || null,
+        quantity: item.quantity,
+        price,
+        discount,
+        finalprice: discountedPrice,
+        sellerid: item.productid.sellers[0]._id,
+        isAvailable: true,
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error creating order:", errorData);
-        alert("Error placing order!");
-      } else {
-        const successData = await response.json();
-        console.log("Order created:", successData);
-        alert("Your order has been placed successfully!");
-        // Optionally, redirect
-        router.push("/orderSuccess");
-      }
-    } catch (err) {
-      console.error("Error in placeOrder:", err);
-      alert("An error occurred while placing your order.");
+      finalAmount += price * item.quantity;
+      finalAmountDiscounted += discountedPrice * item.quantity;
+    });
+
+    const transactionId = "TXN" + Date.now();
+    const timestamp = new Date().toISOString();
+
+    const orderData = {
+      userid: userId,
+      items: itemsToOrder,
+      totalamount: finalAmount,
+      shippingamount: deliveryCharge,
+      platformFee: gstFee.platformFee,
+      gstAmount: gstFee.gstPercentage,
+      totalpayable:
+        finalAmountDiscounted + deliveryCharge + gstFee.platformFee + gstFee.gstPercentage,
+      paymentmethod: "COD",
+      paymentstatus: "pending",
+      orderstatus: "pending",
+      shippingaddress: {
+        street: formData.street,
+        city: formData.city,
+        state: formData.state,
+        pincode: formData.pincode,
+      },
+      userContact: userContact,
+      userEmail: formData.email || userEmail,
+      orderTrackingNumber: transactionId,
+      createdat: timestamp,
+    };
+
+    const res = await fetch("https://backend.leafylegacy.in/api/orders/buynow", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(orderData),
+    });
+
+    if (res.ok) {
+      setMessage("Order placed successfully!");
+      audioRef.current?.play();
+    } else {
+      setMessage("Order failed. Try again.");
     }
+
+    setShowPopup(true);
+    setShowConfirmation(false);
   };
 
   return (
     <div className={styles.container}>
-      {/* Header */}
       <header className={styles.header}>
-        <div className={styles.leftSection}>
-          <div className={styles.logo}>🌿 Greenzy</div>
-        </div>
-        <div className={styles.centerSection}>
-          <span className={styles.pageTitle}>Buy Now</span>
-        </div>
+        <div className={styles.logo}>🌿 Greenzy</div>
+        <div className={styles.pageTitle}>Buy Now</div>
         <div className={styles.rightSection}>
-          <div className={styles.searchBar}>
-            <input
-              type="text"
-              placeholder="Search for plants, seeds and planters ..."
-            />
-            <FaSearch className={styles.searchIcon} />
-          </div>
+          <FaSearch className={styles.icon} />
           <FaUser className={styles.icon} />
-          <div
-            className={styles.cartIcon}
-            onClick={() => router.push("/cart")}
-          >
+          <div onClick={() => router.push("/cart")}>
             <FaShoppingCart className={styles.icon} />
             <span className={styles.cartBadge}>1</span>
           </div>
         </div>
       </header>
 
-      {/* ====== Two-Column Layout ====== */}
       <div className={styles.checkoutContainer}>
-        {/* Left Column: Billing/Shipping Form */}
         <div className={styles.formSection}>
-          <h2>Billing Details</h2>
-          <div className={styles.formGroup}>
-            <label>First Name *</label>
-            <input
-              type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleInputChange}
-            />
-          </div>
+          <h2>Contact & Delivery</h2>
 
-          <div className={styles.formGroup}>
-            <label>Last Name *</label>
-            <input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label>Company Name (optional)</label>
-            <input
-              type="text"
-              name="companyName"
-              value={formData.companyName}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label>Street Address *</label>
-            <input
-              type="text"
-              name="street"
-              placeholder="House number and street name"
-              value={formData.street}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="apartment"
-              placeholder="Apartment, suite, unit, etc. (optional)"
-              value={formData.apartment}
-              onChange={handleInputChange}
-              style={{ marginTop: "8px" }}
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label>Town / City *</label>
-            <input
-              type="text"
-              name="city"
-              value={formData.city}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label>State *</label>
-            <input
-              type="text"
-              name="state"
-              value={formData.state}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label>Country / Region *</label>
-            <input
-              type="text"
-              name="country"
-              value={formData.country}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label>Postcode / ZIP *</label>
-            <input
-              type="text"
-              name="pincode"
-              value={formData.pincode}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label>Phone *</label>
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label>Email Address *</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-            />
-          </div>
+          {[
+            { label: "First Name", name: "firstName" },
+            { label: "Last Name", name: "lastName" },
+            { label: "Pincode", name: "pincode" },
+            { label: "City", name: "city", readOnly: true },
+            { label: "Apartment", name: "apartment" },
+            { label: "Street", name: "street" },
+            { label: "State", name: "state", readOnly: true },
+            { label: "Phone", name: "phone", error: formErrors.phone },
+            { label: "Email", name: "email", error: formErrors.email },
+          ].map(({ label, name, readOnly, error }) => (
+            <div key={name} style={{ marginBottom: "18px" }}>
+              <label style={{ color: "#58a6ff", display: "block", marginBottom: "5px" }}>{label}</label>
+              <input
+                name={name}
+                value={formData[name]}
+                onChange={handleInputChange}
+                placeholder={`Enter ${label}`}
+                readOnly={readOnly}
+              />
+              {error && <span style={{ color: "#ff6b6b", fontSize: "12px" }}>{error}</span>}
+            </div>
+          ))}
         </div>
 
-        {/* Right Column: Order Summary */}
         <div className={styles.summarySection}>
-          <h2>Your order</h2>
+          <h2>Summary</h2>
+          <p>Subtotal: ₹{total.toFixed(2)}</p>
+          <p>Discounted: ₹{totalWithDiscount.toFixed(2)}</p>
+          <p>GST: ₹{gstFee.gstPercentage}</p>
+          <p>Platform Fee: ₹{gstFee.platformFee}</p>
+          <p>Delivery: ₹{deliveryCharge}</p>
+          <hr />
+          <h3>
+            Total: ₹
+            {(totalWithDiscount + gstFee.platformFee + gstFee.gstPercentage + deliveryCharge).toFixed(2)}
+          </h3>
 
-          {/* Single Item Checkout */}
-          {singleItem && (
-            <div className={styles.itemSummary}>
-              <p>
-                <strong>Product:</strong> {singleItem.productid.productname} {" x "}
-                {singleItem.quantity}
-              </p>
-              <p>
-                <strong>Subtotal:</strong> ₹{total.toFixed(2)}
-              </p>
-              <p>
-                <strong>Discounted:</strong> ₹{totalWithDiscount.toFixed(2)}
-              </p>
-            </div>
-          )}
-
-          {/* Cart Items Checkout */}
-          {!singleItem && cartItems.length > 0 && (
-            <div className={styles.itemSummary}>
-              {cartItems.map((item) => {
-                const price = item.productid.sellers[0].price;
-                const discount = item.productid.discount || 0;
-                const discountedPrice = price - (price * discount) / 100;
-                return (
-                  <div key={item._id} className={styles.cartItem}>
-                    <p>
-                      <strong>{item.productid.productname}</strong> × {item.quantity}
-                    </p>
-                    <p>Subtotal: ₹{(price * item.quantity).toFixed(2)}</p>
-                    <p>
-                      Discounted Price: ₹
-                      {(discountedPrice * item.quantity).toFixed(2)}
-                    </p>
-                  </div>
-                );
-              })}
-              <hr className={styles.divider} />
-              <p><strong>Estimated Total:</strong> ₹{total}</p>
-              <p><strong>Estimated Total (with discount):</strong> ₹{totalWithDiscount}</p>
-            </div>
-          )}
-
-          {/* Payment Options (example) */}
-          <div className={styles.paymentSection}>
-            <h3>Payment</h3>
-            <p>Cash on delivery</p>
-            <p>Pay with cash upon delivery.</p>
-          </div>
-
-          <button onClick={placeOrder} className={styles.placeOrderButton}>
-            Place Order
+          <button onClick={confirmAndPlaceOrder} className={styles.placeOrderButton}>
+            Place Order (Cash on Delivery)
           </button>
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className={styles.footer}>
-        <p>&copy; 2025 Greenzy. All Rights Reserved.</p>
-        <div className={styles.socialIcons}>
-          <a href="#">
-            <FaFacebook />
-          </a>
-          <a href="#">
-            <FaInstagram />
-          </a>
-          <a href="#">
-            <FaTwitter />
-          </a>
+      {/* ✅ Confirmation Modal */}
+      {showConfirmation && (
+        <div className={styles.successModal}>
+          <h3>Confirm Your Order</h3>
+          <p><strong>Item:</strong> {singleItem ? singleItem.productid.productname : `${cartItems.length} items`}</p>
+          <p><strong>Deliver To:</strong></p>
+          <p>{formData.street}, {formData.city}, {formData.state} - {formData.pincode}</p>
+          <button className={styles.placeOrderButton} onClick={placeOrder}>Confirm & Order</button>
+          <button className={styles.closeButton} onClick={() => setShowConfirmation(false)}>Cancel</button>
         </div>
-      </footer>
+      )}
+
+      {/* ✅ Success/Failure Modal */}
+      {showPopup && (
+        <div className={styles.successModal}>
+          {message.toLowerCase().includes("success") ? (
+            <FaCheckCircle className={styles.successIcon} />
+          ) : (
+            <FaTimesCircle className={styles.errorIcon} />
+          )}
+          <h3>{message.toLowerCase().includes("success") ? "Success!" : "Failed!"}</h3>
+          <p>{message}</p>
+          <button className={styles.closeButton} onClick={() => setShowPopup(false)}>
+            Close
+          </button>
+        </div>
+      )}
+      
     </div>
   );
 }

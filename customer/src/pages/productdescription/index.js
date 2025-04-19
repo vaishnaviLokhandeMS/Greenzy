@@ -22,13 +22,13 @@ export default function ProductDescription() {
   // Fetch product & categories
   useEffect(() => {
     if (productid) {
-      fetch(`http://localhost:5000/api/products/by-id/${productid}`)
+      fetch(`https://backend.leafylegacy.in/api/products/by-id/${productid}`)
         .then((res) => res.json())
         .then((data) => setProduct(data))
         .catch((err) => console.error("❌ Product Error:", err));
     }
 
-    fetch("http://localhost:8000/api/categories")
+    fetch("https://backendnursury.leafylegacy.in/api/categories")
       .then((res) => res.json())
       .then((data) => setCategories(data))
       .catch((err) => console.error("❌ Category Error:", err));
@@ -49,7 +49,7 @@ export default function ProductDescription() {
 
   const handleAddToCart = () => {
     const contactnumber = localStorage.getItem("contactnumber"); // Update with the logged-in user's contact number
-    fetch("http://localhost:5000/api/cart/add", {
+    fetch("https://backend.leafylegacy.in/api/cart/add", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -109,7 +109,7 @@ export default function ProductDescription() {
         <div className={styles.imageBox}>
           {product.filenames?.length > 0 && (
             <img
-              src={`http://localhost:5000/uploads/${product.filenames[currentImageIndex]}`}
+              src={`https://backend.leafylegacy.in/uploads/${product.filenames[currentImageIndex]}`}
               alt={`Product ${currentImageIndex + 1}`}
               className={styles.productImage}
             />

@@ -13,15 +13,21 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/users/login", {
+      const res = await axios.post("https://backend.leafylegacy.in/api/users/login", {
         contactnumber,
         password,
       });
 
       if (res.data.success) {
         alert("Login Successful!");
+
+        // ✅ Correctly store user data
         localStorage.setItem("contactnumber", contactnumber);
-        router.push("/home");
+        localStorage.setItem("useremail", res.data.email || "guest@greenzy.in");
+        localStorage.setItem("userid", res.data.userId);  // ✅ Fixed key name
+        localStorage.setItem("fullname", res.data.fullname || "");
+
+        router.push("/cart");
       } else {
         setError("Invalid credentials!");
       }

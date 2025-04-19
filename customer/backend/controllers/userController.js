@@ -34,7 +34,14 @@ const loginUser = async (req, res) => {
     }
 
     console.log("✅ Login Successful for:", user.fullname);
-    res.status(200).json({ success: true, message: "Login successful", userId: user._id });
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      userId: user._id,
+      email: user.email || "guest@greenzy.in",
+      fullname: user.fullname || "",
+    });
+    
 
   } catch (error) {
     console.error("❌ Server Error:", error);

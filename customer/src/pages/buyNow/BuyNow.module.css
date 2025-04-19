@@ -1,82 +1,55 @@
-/* pages/buynow/buyNow.module.css */
-
-/* Container for the entire page */
 .container {
   background-color: #121212;
   color: #e0e0e0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding-bottom: 30px;
 }
 
 /* Header */
 .header {
   background-color: #161b22;
-  padding: 15px 30px;
+  padding: 20px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   position: sticky;
   top: 0;
   z-index: 100;
-}
-
-.leftSection,
-.centerSection,
-.rightSection {
-  display: flex;
-  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .logo {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 28px;
+  font-weight: 700;
   color: #58a6ff;
-  margin-right: 20px;
 }
 
 .pageTitle {
-  font-size: 20px;
-  color: #fff;
-  margin-left: 15px;
+  font-size: 22px;
+  color: #ffffff;
+  margin-top: 5px;
 }
 
-.searchBar {
+.rightSection {
   display: flex;
   align-items: center;
-  background-color: #fff;
-  border-radius: 30px;
-  padding: 6px 12px;
-  height: 38px;
-  width: 280px;
-  border: 1px solid #ccc;
-  margin-right: 15px;
-}
-
-.searchBar input {
-  border: none;
-  outline: none;
-  width: 100%;
-  font-size: 14px;
-  color: #333;
-  background: transparent;
-}
-
-.searchIcon {
-  color: #333;
-  font-size: 16px;
-  margin-left: 8px;
-  cursor: pointer;
+  margin-top: 10px;
+  gap: 15px;
 }
 
 .icon {
   font-size: 24px;
-  margin-right: 15px;
+  color: #58a6ff;
   cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
-.cartIcon {
-  position: relative;
+.icon:hover {
+  transform: scale(1.2);
 }
 
 .cartBadge {
@@ -86,135 +59,259 @@
   background-color: greenyellow;
   color: #000;
   font-size: 12px;
-  padding: 2px 5px;
+  padding: 2px 6px;
   border-radius: 50%;
 }
 
-/* 2-Column Layout for Checkout */
+/* Checkout Layout */
 .checkoutContainer {
   display: flex;
-  flex-grow: 1;
-  gap: 30px;
-  padding: 20px 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 50px 40px;
+  gap: 40px;
 }
 
-/* Left Column: Form */
+/* Form Section */
 .formSection {
-  flex: 0.7; /* 70% width */
-  background-color: #1c2128;
-  padding: 20px;
+  flex: 1;
+  min-width: 320px;
+  max-width: 600px;
+  background-color: #1e232b;
+  padding: 30px 35px;
   border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.45);
+  transition: all 0.3s ease-in-out;
 }
 
 .formSection h2 {
-  margin-bottom: 20px;
-  font-size: 22px;
+  margin-bottom: 25px;
+  font-size: 24px;
   color: #58a6ff;
+  font-weight: 600;
 }
 
-.formGroup {
-  margin-bottom: 15px;
-  display: flex;
-  flex-direction: column;
-}
-
-.formGroup label {
-  margin-bottom: 5px;
-  font-size: 14px;
-  color: #ccc;
-}
-
-.formGroup input {
-  padding: 10px;
+.formSection input {
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 14px 16px;
   border-radius: 8px;
   border: 1px solid #333;
   background-color: #161b22;
-  color: #fff;
+  color: #ffffff;
+  font-size: 15px;
+  transition: border-color 0.3s;
 }
 
-.formGroup input::placeholder {
-  color: #888;
+.formSection input:focus {
+  border-color: #58a6ff;
+  outline: none;
 }
 
-/* Right Column: Order Summary */
+.formSection input::placeholder {
+  color: #aaa;
+}
+
+/* Summary Section */
 .summarySection {
-  flex: 0.3; /* 30% width */
-  background-color: #1c2128;
-  padding: 20px;
+  flex: 1;
+  min-width: 280px;
+  max-width: 400px;
+  background-color: #1e232b;
+  padding: 30px 35px;
   border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.45);
   height: fit-content;
 }
 
 .summarySection h2 {
-  margin-bottom: 20px;
-  font-size: 22px;
+  font-size: 24px;
   color: #58a6ff;
-}
-
-.itemSummary {
-  background-color: #161b22;
-  padding: 15px;
-  border-radius: 8px;
+  font-weight: 600;
   margin-bottom: 20px;
 }
 
-.cartItem {
-  margin-bottom: 15px;
-  border-bottom: 1px solid #333;
-  padding-bottom: 10px;
-}
-
-.divider {
+.summarySection p {
+  font-size: 15px;
+  color: #cccccc;
   margin: 10px 0;
+}
+
+.summarySection hr {
+  margin: 20px 0;
   border: none;
-  border-bottom: 1px solid #333;
+  border-top: 1px solid #333;
 }
 
-.paymentSection {
-  margin-bottom: 20px;
+.summarySection h3 {
+  font-size: 20px;
+  color: #ffffff;
+  font-weight: bold;
 }
 
-.paymentSection h3 {
-  margin-bottom: 10px;
-  font-size: 18px;
-}
-
+/* Button */
 .placeOrderButton {
   width: 100%;
-  padding: 12px 20px;
-  background-color: #58a6ff;
+  padding: 14px 0;
+  background: linear-gradient(90deg, #58a6ff, #2c80ff);
   color: #fff;
   border: none;
   border-radius: 8px;
   font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
+  margin-top: 20px;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .placeOrderButton:hover {
-  background-color: #88c8ff;
+  background: linear-gradient(90deg, #70bfff, #509aff);
+  transform: scale(1.02);
 }
 
-/* Footer */
-.footer {
-  background-color: #161b22;
-  text-align: center;
-  padding: 15px;
-  border-top: 2px solid #58a6ff;
-}
-
-.socialIcons {
+.popupCenter {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #1e1e1e;
+  color: #ffffff;
+  border-left: 5px solid #58a6ff;
+  padding: 20px 30px;
+  border-radius: 10px;
+  z-index: 1000;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 0 20px rgba(88, 166, 255, 0.4);
+  animation: fadeInOutCenter 3s ease forwards;
   display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 10px;
+  flex-direction: column;
+  align-items: center;
+  min-width: 250px;
+  text-align: center;
 }
 
-.socialIcons a {
-  color: #58a6ff;
+.successModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #1a1a1a;
+  padding: 30px 40px;
+  border-radius: 12px;
+  z-index: 2000;
+  text-align: center;
+  color: #ffffff;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+  min-width: 280px;
+}
+
+.successModal h3 {
   font-size: 22px;
-  transition: transform 0.3s ease-in-out;
+  margin-bottom: 10px;
+  color: #a3ffb3;
 }
 
-.socialIcons a:hover {
-  transform: scale(1.2);
+.successModal p {
+  margin: 6px 0;
+  font-size: 15px;
+  color: #ccc;
+}
+
+.successIcon {
+  font-size: 60px;
+  color: #76ff03;
+  margin-bottom: 10px;
+}
+
+.errorIcon {
+  font-size: 60px;
+  color: #ff5252;
+  margin-bottom: 10px;
+}
+
+.closeButton {
+  margin-top: 15px;
+  padding: 8px 18px;
+  background-color: #58a6ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.closeButton:hover {
+  background-color: #70bfff;
+}
+
+/* Reuse existing button styling for confirm button */
+.placeOrderButton {
+  width: 100%;
+  padding: 14px 0;
+  background: linear-gradient(90deg, #58a6ff, #2c80ff);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.placeOrderButton:hover {
+  background: linear-gradient(90deg, #70bfff, #509aff);
+  transform: scale(1.02);
+}
+
+
+/* Close button inside popup */
+.closeButton {
+  margin-top: 15px;
+  padding: 6px 14px;
+  background-color: #58a6ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.closeButton:hover {
+  background-color: #70bfff;
+}
+
+@keyframes fadeInOutCenter {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -40%);
+  }
+  10%, 90% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+}
+
+/* Add optional fade effect */
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  10%, 90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 }

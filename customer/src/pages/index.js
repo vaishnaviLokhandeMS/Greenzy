@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 export default function Home() {
   const router = useRouter();
   useEffect(() => {
-    router.push("/login"); // Redirect to Login Page
+    router.push("/home"); // Redirect to Login Page
   }, []);
   return null;
 }

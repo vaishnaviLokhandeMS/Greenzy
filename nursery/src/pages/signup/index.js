@@ -40,7 +40,7 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:8000/api/nursery/signup', formData);
+            const res = await axios.post('http://backendnursury.leafylegacy.in/api/nursery/signup', formData);
             setMessage(res.data.message);
         } catch (error) {
             setMessage(error.response?.data?.error || error.response?.data?.message || 'Signup failed');

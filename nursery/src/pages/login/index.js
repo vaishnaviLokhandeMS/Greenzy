@@ -15,7 +15,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:8000/api/nursery/login', formData);
+            const res = await axios.post('http://backendnursury.leafylegacy.in/api/nursery/login', formData);
             localStorage.setItem('token', res.data.token);
             router.push('/home');
         } catch (error) {

@@ -23,7 +23,7 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/users/register", user);
+      const res = await axios.post("https://backend.leafylegacy.in/api/users/register", user);
       if (res.status === 201) {
         alert("Signup Successful!");
         router.push("/login");

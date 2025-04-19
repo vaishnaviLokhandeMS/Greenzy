@@ -61,7 +61,7 @@ export default function Home() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/categories");
+        const res = await fetch("https://backendnursury.leafylegacy.in/api/categories");
         const data = await res.json();
         setCategories(data);
       } catch (error) {
@@ -89,7 +89,7 @@ export default function Home() {
       <header className={styles.header}>
         {/* Logo + Categories */}
         <div className={styles.leftSection}>
-          <div className={styles.logo}>🌿 Greenzy</div>
+          <div className={styles.logo}>🌿 LeafyLegacy.in</div>
           <nav className={styles.nav}>
             {categories.map((category) => (
               <div key={category._id} className={styles.dropdown}>

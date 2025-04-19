@@ -29,7 +29,7 @@ exports.viewCart = async (req, res) => {
     const user = await User.findOne({ contactnumber: req.params.contactnumber })
       .populate({
         path: "cart.productid",
-        select: "productname sellers filenames discount", // Fetch necessary fields
+        select: "productname sellers filenames discount categoryid subcategoryid", // Fetch necessary fields
       });
 
     if (!user) return res.status(404).json({ message: "User not found" });
